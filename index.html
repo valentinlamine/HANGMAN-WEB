@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css" type="text/css">    
+    </head>
+    <body>
+        {{if .Success}}
+            <h1>Bienvenue jeune joueur<br>
+            Vous avez choisi le niveau {{.Difficulte}}</h1>
+            {{if .Difficulte "facile"}}
+                <p>Vous avez choisi le niveau facile</p>
+                <a href="pages/facile.html">facile</a>
+            {{else if .Difficulte "moyen"}}
+                <p>Vous avez choisi le niveau moyen</p>
+                <a href="pages/moyen.html">moyen</a>
+            {{else if .Difficulte "difficile"}}
+                <p>Vous avez choisi le niveau difficile</p>
+                <a href="pages/difficile.html">difficile</a>
+            {{end}}
+        {{else}}
+            <h1>Bienvenue sur le jeu du pendu !<br>
+                Veuillez remplir les champs ci-dessous pour jouer </h1>
+            <form method="POST">
+                <input type="radio" name="difficulte" value="facile" checked>Facile<br>
+                <input type="radio" name="difficulte" value="moyen">Moyen<br>
+                <input type="radio" name="difficulte" value="difficile">Difficile<br>
+                <input type="submit" value="Choisir">
+            </form>
+        {{end}}
+        <a href="/">Retour à l'accueil</a>
+    </body>
+</html>

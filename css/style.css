@@ -1,0 +1,18 @@
+body {
+    background-color: rgb(104, 56, 22);
+}
+
+
+
+a{
+    text-decoration: none;
+}
+
+.available{
+    color: green;
+}
+
+.not-available{
+    color: red;
+    }
+    
