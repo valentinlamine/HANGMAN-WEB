@@ -55,24 +55,26 @@ body {
 }
 
 .titre{
-    position: relative;
-    position: top;
-    position: left;
+    position: absolute;
+    top:0%;
 }
 
 .mot_a_trouver{
-    position: relative;
-    position: left;
+    position: absolute;
+    left: 0%;
+    top: 30%;
 }
 
 .boite_entrer_lettre{
-    position: relative;
-    position: bottom;
+    position: absolute;
+    bottom: 10%;
+    left: 5%;
 }
 
 .pendu{
-    position:relative;
-    position: right;
+    position:absolute;
+    right: 5%;
+    top: 25%;
 }
 
 .boite_entrer{
@@ -80,7 +82,5 @@ body {
     border-width: 2px;
     border-style: solid;
     border-radius: 5px;
-    background-color: black;
-    color: white;
 }
 
