@@ -5,15 +5,36 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="style.css" type="text/css">
-        <link rel="shortcut icon" href="images/potence.ico" />
+        <link rel="stylesheet" href="css_pierre/style.css" type="text/css">
+        <link rel="shortcut icon" href="potence.ico" />
         <title> Pendu </title>
     </head>
     <body class="accueil">
         <div class="boite_principale">
-            <h1 class="titre_accueil"> Accueil </h1>
-            <p class="texte_accueil"> Cliquez sur le bouton pour jouer au pendu </p>
-            <button class="bouton_accueil" onclick="window.location.href='page.html'"> Jouer </button>
+            <h1> Bienvenue sur le jeu du pendu ! </h1>
+            <p> Veuillez remplir les champs ci-dessous pour jouer : </p>
+            {{if .Success}}
+                <h1>Bienvenue jeune joueur<br>
+                Vous avez choisi le niveau {{.Difficulte}}</h1>
+                {{if eq .Difficulte "facile"}}
+                    <p>Vous avez choisi le niveau facile</p>
+                    <a href="../pages/facile.html">cliquez sur commencer</a>
+                {{else if eq .Difficulte "moyen"}}
+                    <p>Vous avez choisi le niveau moyen</p>
+                    <a href="../pages/moyen.html">moyen</a>
+                {{else if eq .Difficulte "difficile"}}
+                    <p>Vous avez choisi le niveau difficile</p>
+                    <a href="../pages/difficile.html">difficile</a>
+                {{end}}
+            {{else}}
+                <form method="POST">
+                    <input type="radio" name="difficulte" value="facile" checked>Facile<br>
+                    <input type="radio" name="difficulte" value="moyen">Moyen<br>
+                    <input type="radio" name="difficulte" value="difficile">Difficile<br>
+                    <input type="submit" value="Choisir">
+                </form>
+            {{end}}
+            <a href="/">Retour à l'accueil</a>
         </div>
     </body>
 </html>

@@ -7,9 +7,6 @@
 body {
     height: 100vh;
     width: 100vw;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 .accueil{
@@ -17,6 +14,9 @@ body {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .boite_principale {
@@ -29,13 +29,15 @@ body {
     align-items: center;
 }
 
-h1 {
+.titre{
     font-size: 50px;
     font-family: 'Lobster', cursive;
     margin-bottom: 20px;
+    position: absolute;
+    top:0%;
 }
 
-p {
+.texte{
     font-size: 20px;
     font-family: 'Lobster', cursive;
     margin-bottom: 20px;
@@ -49,14 +51,33 @@ p {
     border-radius: 20px;
 }
 
-.lettres{
+.page_pendu{
+    background-color: aquamarine;
+    text-align: left;
+}
+
+.mot_a_trouver{
+    position: absolute;
+    left: 0%;
+    top: 30%;
+}
+
+.boite_entrer_lettre{
+    position: absolute;
+    bottom: 10%;
+    left: 5%;
+}
+
+.pendu{
+    position:absolute;
+    right: 5%;
+    top: 25%;
+}
+
+.boite_entrer{
     border-color: black;
     border-width: 2px;
     border-style: solid;
     border-radius: 5px;
-    background-color: black;
-    color: white;
-    position: relative;
-    margin-top: 50px;
-    margin-left: 47.5%;
 }
+

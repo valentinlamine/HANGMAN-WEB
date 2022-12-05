@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="css/style.css" type="text/css">
+        <link rel="shortcut icon" href="images/potence.ico" />
+        <title> Pendu </title>
+    </head>
+    <body>
+        {{if .Success}}
+            {{if gt .Essaie 0}}
+                <p>{{.Mot_actuel}}</p>
+                <p>Il vous reste {{.Essaie}} essaie(s)</p>
+                <p>Les lettres déjà proposées sont : {{.Liste_lettre}}</p>
+                <form method="POST">
+                    <input type="text" name="lettre" placeholder="Proposez une lettre">
+                    <input type="submit" value="Valider">
+                </form>
+            {{else}}
+                <h1>Vous avez perdu !</h1>
+                <p>Le mot était : {{.Mot_a_trouver}}</p>
+                <a href="/">Rejouer</a>
+            {{end}}
+        {{else}}
+        <p>Internal Server Error</p>
+        {{end}}
+    </body>
+</html>

@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+	"hangman-web/pendu"
 	"html/template"
 	"net/http"
 )
@@ -10,24 +12,30 @@ type User struct {
 	Success    bool
 }
 
-// le but est d'intégrer le code de pendu.go dans le code de main.go
 func main() {
-	println("Le serveur est lancé sur le port 80")
-	template_choix_difficulte := template.Must(template.ParseFiles("index.html")) //on parse le fichier html
-	fs := http.FileServer(http.Dir("css"))                                        //on définit le dossier css
-	http.Handle("/css/", http.StripPrefix("/css/", fs))                           //on définit le dossier css
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {           //on définit la page d'accueil
-		if r.Method != http.MethodPost { //si la méthode n'est pas POST
-			template_choix_difficulte.Execute(w, nil) //on affiche la page d'accueil
-			return
-		} //sinon on récupère les données du formulaire
-		difficulte := r.FormValue("difficulte")
-		println(difficulte)
-		details := User{
-			Difficulte: r.FormValue("difficulte"),
-			Success:    true,
-		}
-		template_choix_difficulte.Execute(w, details)
-	})
+	fmt.Println("Lancement du serveur sur le port 80 : http://localhost")
+	//gestion des css
+	fs := http.FileServer(http.Dir("css"))
+	http.Handle("/css/", http.StripPrefix("/css/", fs))
+	//gestion des templates
+	http.HandleFunc("/", IndexHandler)
+	http.HandleFunc("/pendu", PenduHandler)
 	http.ListenAndServe(":80", nil)
+}
+
+func IndexHandler(w http.ResponseWriter, r *http.Request) {
+	t, _ := template.ParseFiles("index.html")
+	if r.Method != http.MethodPost {
+		t.Execute(w, nil)
+		return
+	}
+	difficulte := r.FormValue("difficulte")
+	user := User{Difficulte: difficulte, Success: true}
+	t.Execute(w, user)
+}
+
+func PenduHandler(w http.ResponseWriter, r *http.Request) {
+	t, _ := template.ParseFiles("pendu.html")
+	t.Execute(w, nil)
+	pendu.Jeux_pendu()
 }

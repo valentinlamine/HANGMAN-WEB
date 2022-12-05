@@ -1,4 +1,4 @@
-package main
+package pendu
 
 import (
 	"fmt"
@@ -14,9 +14,10 @@ type variables struct {
 	Mot_actuel    string
 	Essaie        int
 	Liste_lettre  []string
+	phrase        string
 }
 
-func jeux_pendu() {
+func Jeux_pendu() {
 	var Partie variables
 	Partie.Initialisation() //on initialise le jeu
 	for Partie.Essaie > 0 { //boucle principale du jeu, s'arrête lorsque l'on perd
@@ -34,21 +35,11 @@ func jeux_pendu() {
 func (Partie *variables) Initialisation() {
 	Partie.Essaie = 10     //on initialise le nombre d'essaie
 	if len(os.Args) != 2 { //vérifie qu'il y a bien un argument
-		fmt.Print("\nMerci d'indiquer le nom du fichier texte à utiliser : \nExemple : go run main.go words.txt\n\n")
+		Partie.phrase = "Merci d'indiquer le nom du fichier texte à utiliser : \nExemple : go run main.go words.txt\n\n"
 		os.Exit(1) //sinon, on quitte le programme
 	} else {
 		Lecture_Fichier(os.Args[1], Partie) //on lit le fichier donné en argument
 	}
-	Affichage_espace() //on affiche un espace pour faire un affichage propre
-	fmt.Println("Bienvenue dans le jeu du pendu !")
-	fmt.Println("Bonne chance, vous avez 10 essaies")
-	fmt.Println("\nNote : Le programme affiche des lettres dès le lancement, Toutefois il n'affiche pas pour autant toutes les occurences de ces lettres")
-}
-
-func Affichage_espace() { //pour faire un affichage propre
-	fmt.Print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
-	fmt.Print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
-	fmt.Print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
 }
 
 func Affichage_mot(Partie variables) {
@@ -56,7 +47,6 @@ func Affichage_mot(Partie variables) {
 	for _, caractère := range Partie.Mot_actuel {
 		fmt.Print(strings.ToUpper(string(caractère)), " ") // Permet d'afficher les lettres en majuscule avec un espace entre chaque
 	}
-	fmt.Print("\n\n")
 }
 
 func Affichage_liste_lettre(Partie variables) {
@@ -71,19 +61,17 @@ func Affichage_liste_lettre(Partie variables) {
 }
 
 func Affichage_pendu(Partie variables) {
-	Affichage_espace()                         //on affiche un espace pour faire un affichage propre
 	fichier, err := os.ReadFile("hangman.txt") //on lit le fichier
 	if err != nil {                            //si il y a une erreur
-		fmt.Println("Impossible d'ouvrir le fichier")
+		Partie.phrase = "Impossible d'ouvrir le fichier hangman.txt"
 		os.Exit(1) //on quitte le programme
 	}
 	var position int = 10 - (Partie.Essaie + 1) //on calcule la position de la ligne à afficher
 	for i := 0; i < 7; i++ {                    //on boucle sur les 7 lignes du fichier
 		for j := 0; j < 10; j++ { //on boucle sur les 10 caractères de la ligne
-			fmt.Print(string(fichier[position*71+i*10+j])) //on affiche le caractère
+			Partie.phrase = string(fichier[position*71+i*10+j])
 		}
 	}
-	fmt.Println()
 }
 
 func Entrée_utilisateur(Partie variables) string { //demande à l'utilisateur de choisir une lettre ou un mot
@@ -110,7 +98,7 @@ func Lecture_Fichier(nom_fichier string, Partie *variables) {
 	var liste_mots []string
 	fichier, err := os.ReadFile(nom_fichier) //on lit le fichier
 	if err != nil {                          //si il y a une erreur
-		fmt.Println("fichier introuvable ou illisible")
+		Partie.phrase = "Impossible d'ouvrir le fichier " + nom_fichier
 		os.Exit(1) //on quitte le programme
 	}
 	for index, caractère := range fichier {
@@ -124,7 +112,7 @@ func Lecture_Fichier(nom_fichier string, Partie *variables) {
 			liste_mots = append(liste_mots, mot)
 		}
 		if caractère == 32 || (!Est_lettre(string(caractère)) && caractère != 10) { //si le caractère est un espace
-			fmt.Println("Le fichier contient des caractères non autorisés, merci d'utiliser un fichier texte avec uniquement des lettres minuscules")
+			Partie.phrase = "Le fichier contient des caractères non autorisés, merci d'utiliser un fichier texte avec uniquement des lettres minuscules"
 			os.Exit(1) //on quitte le programme
 		}
 	}
@@ -148,7 +136,7 @@ func Revelation_lettre(lettre string, Partie *variables) {
 				Partie.Essaie = 0 //on met les essai à 0 au cas ou ils étaient négatif
 			}
 			Affichage_pendu(*Partie) //on affiche le pendu
-			fmt.Println("Votre mot est incorrect, il vous reste", Partie.Essaie, "essaies")
+			Partie.phrase = "Votre mot est incorrect, il vous reste " + string(rune(Partie.Essaie)) + " essaies"
 		}
 	} else {
 		var mot_temporaire string
@@ -162,17 +150,14 @@ func Revelation_lettre(lettre string, Partie *variables) {
 		Partie.Liste_lettre = append(Partie.Liste_lettre, strings.ToUpper(lettre)) //on ajoute la lettre à la liste des lettres essayées
 		sort.Strings(Partie.Liste_lettre)                                          //on trie la liste
 		if mot_temporaire == Partie.Mot_actuel {                                   //si le mot temporaire est égal au mot actuel
-			Partie.Essaie--          //on enlève un essaie
-			Affichage_pendu(*Partie) //on affiche le pendu
-			fmt.Println("La lettre n'est pas dans le mot, il vous reste", Partie.Essaie, "essaies :")
+			Partie.Essaie-- //on enlève un essaie
+			Partie.phrase = "La lettre n'est pas dans le mot, il vous reste " + string(rune(Partie.Essaie)) + " essaies :"
 		} else {
 			Partie.Mot_actuel = mot_temporaire //on met le mot actuel à jour
 			if Partie.Essaie != 10 {
-				Affichage_pendu(*Partie) //on affiche le pendu
-				fmt.Println("La lettre est dans le mot, il vous reste", Partie.Essaie, "essaies :")
+				Partie.phrase = "La lettre est dans le mot, il vous reste " + string(rune(Partie.Essaie)) + " essaies :"
 			} else {
-				Affichage_espace() //on affiche un espace
-				fmt.Println("La lettre est dans le mot, il vous reste", Partie.Essaie, "essaies :")
+				Partie.phrase = "La lettre est dans le mot, il vous reste " + string(rune(Partie.Essaie)) + " essaies :"
 			}
 		}
 	}
