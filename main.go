@@ -12,6 +12,8 @@ type User struct {
 	Success    bool
 }
 
+var Partie pendu.Variables_pendu
+
 func main() {
 	fmt.Println("Lancement du serveur sur le port 80 : http://localhost")
 	//gestion des css
@@ -37,5 +39,8 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 func PenduHandler(w http.ResponseWriter, r *http.Request) {
 	t, _ := template.ParseFiles("pendu.html")
 	t.Execute(w, nil)
-	pendu.Jeux_pendu()
+	if Partie.Essaie == 0 {
+		Partie.Initialisation("words.txt")
+	}
+	Partie.Revelation_lettre(r.FormValue("lettre"), &Partie)
 }

@@ -9,7 +9,7 @@ import (
 )
 
 // variables globales
-type variables struct {
+type Variables_pendu struct {
 	Mot_a_trouver string
 	Mot_actuel    string
 	Essaie        int
@@ -18,9 +18,9 @@ type variables struct {
 }
 
 func Jeux_pendu() {
-	var Partie variables
-	Partie.Initialisation() //on initialise le jeu
-	for Partie.Essaie > 0 { //boucle principale du jeu, s'arrête lorsque l'on perd
+	var Partie Variables_pendu
+	Partie.Initialisation("words.txt") //on initialise le jeu
+	for Partie.Essaie > 0 {            //boucle principale du jeu, s'arrête lorsque l'on perd
 		Affichage_mot(Partie)                                  //on affiche le mot actuel
 		Affichage_liste_lettre(Partie)                         //on affiche la liste des lettres déjà essayées
 		Revelation_lettre(Entrée_utilisateur(Partie), &Partie) //on demande à l'utilisateur de rentrer une lettre
@@ -32,24 +32,19 @@ func Jeux_pendu() {
 	fmt.Println("\n\nVous avez perdu !\nLe mot était :", Partie.Mot_a_trouver)
 }
 
-func (Partie *variables) Initialisation() {
-	Partie.Essaie = 10     //on initialise le nombre d'essaie
-	if len(os.Args) != 2 { //vérifie qu'il y a bien un argument
-		Partie.phrase = "Merci d'indiquer le nom du fichier texte à utiliser : \nExemple : go run main.go words.txt\n\n"
-		os.Exit(1) //sinon, on quitte le programme
-	} else {
-		Lecture_Fichier(os.Args[1], Partie) //on lit le fichier donné en argument
-	}
+func (Partie *Variables_pendu) Initialisation(fichier string) { //initialise le jeu
+	Partie.Essaie = 10               //on initialise le nombre d'essaie
+	Lecture_Fichier(fichier, Partie) //on lit le fichier donné en argument
 }
 
-func Affichage_mot(Partie variables) {
+func Affichage_mot(Partie Variables_pendu) {
 	fmt.Println()
 	for _, caractère := range Partie.Mot_actuel {
 		fmt.Print(strings.ToUpper(string(caractère)), " ") // Permet d'afficher les lettres en majuscule avec un espace entre chaque
 	}
 }
 
-func Affichage_liste_lettre(Partie variables) {
+func Affichage_liste_lettre(Partie Variables_pendu) {
 	if len(Partie.Liste_lettre) == 0 { //si la liste est vide
 		return
 	}
@@ -60,7 +55,7 @@ func Affichage_liste_lettre(Partie variables) {
 	fmt.Println()
 }
 
-func Affichage_pendu(Partie variables) {
+func Affichage_pendu(Partie Variables_pendu) {
 	fichier, err := os.ReadFile("hangman.txt") //on lit le fichier
 	if err != nil {                            //si il y a une erreur
 		Partie.phrase = "Impossible d'ouvrir le fichier hangman.txt"
@@ -74,7 +69,7 @@ func Affichage_pendu(Partie variables) {
 	}
 }
 
-func Entrée_utilisateur(Partie variables) string { //demande à l'utilisateur de choisir une lettre ou un mot
+func Entrée_utilisateur(Partie Variables_pendu) string { //demande à l'utilisateur de choisir une lettre ou un mot
 	var lettre string
 	fmt.Print("Choix : ")
 	fmt.Scanln(&lettre)      //on récupère l'entrée utilisateur
@@ -93,7 +88,7 @@ func Entrée_utilisateur(Partie variables) string { //demande à l'utilisateur d
 	return strings.ToLower(lettre) //on retourne la lettre en minuscule
 }
 
-func Lecture_Fichier(nom_fichier string, Partie *variables) {
+func Lecture_Fichier(nom_fichier string, Partie *Variables_pendu) {
 	var mot string
 	var liste_mots []string
 	fichier, err := os.ReadFile(nom_fichier) //on lit le fichier
@@ -126,7 +121,7 @@ func Lecture_Fichier(nom_fichier string, Partie *variables) {
 	}
 }
 
-func Revelation_lettre(lettre string, Partie *variables) {
+func Revelation_lettre(lettre string, Partie *Variables_pendu) {
 	if len(lettre) != 1 { //vérifie que l'utilisateur a rentré une lettre ou un mot
 		if lettre == Partie.Mot_a_trouver { //vérifie que le mot entré est le bon
 			Partie.Mot_actuel = Partie.Mot_a_trouver //on met le mot actuel à jour
