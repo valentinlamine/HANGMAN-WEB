@@ -8,7 +8,7 @@ import (
 )
 
 type User struct {
-	Difficulte string
+	Difficulty string
 	Username   string
 	Success    bool
 }
@@ -28,7 +28,7 @@ func main() {
 	http.Handle("/images/positions/", http.StripPrefix("/images/positions/", fs))
 	//gestion des templates
 	http.HandleFunc("/", IndexHandler)
-	http.HandleFunc("/pendu", PenduHandler)
+	http.HandleFunc("/hangman", HangmanHandler)
 	http.ListenAndServe(":80", nil)
 }
 
@@ -40,7 +40,7 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	Joueur := User{"none", "none", false}
 	if Joueur.Success {
-		Joueur.Difficulte = r.FormValue("difficulte")
+		Joueur.Difficulty = r.FormValue("difficulty")
 		t.Execute(w, Joueur)
 		return
 	} else {
@@ -50,15 +50,15 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func PenduHandler(w http.ResponseWriter, r *http.Request) {
-	t, _ := template.ParseFiles("pendu.html")
+func HangmanHandler(w http.ResponseWriter, r *http.Request) {
+	t, _ := template.ParseFiles("hangman.html")
 	if Partie.Essaie == 0 {
 		Partie = pendu.Variables_pendu{}
-		if r.FormValue("difficulte") == "facile" {
+		if r.FormValue("difficulty") == "facile" {
 			Partie.Initialisation("pendu/words.txt")
-		} else if r.FormValue("difficulte") == "moyen" {
+		} else if r.FormValue("difficulty") == "moyen" {
 			Partie.Initialisation("pendu/words2.txt")
-		} else if r.FormValue("difficulte") == "difficile" {
+		} else if r.FormValue("difficulty") == "difficile" {
 			Partie.Initialisation("pendu/words3.txt")
 		}
 		t.Execute(w, Partie)

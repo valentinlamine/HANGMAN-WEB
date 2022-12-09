@@ -92,20 +92,21 @@ func (Partie *Variables_pendu) Lecture_Fichier(nom_fichier string) {
 	fichier, err := os.ReadFile(nom_fichier) //on lit le fichier
 	if err != nil {                          //si il y a une erreur
 		Partie.Phrase = "Impossible d'ouvrir le fichier " + nom_fichier
-		print(Partie.Phrase)
+		println(Partie.Phrase)
+		println(err)
 		os.Exit(1) //on quitte le programme
 	}
 	for index, caractère := range fichier {
-		if caractère == 10 { //lorsque l'on va à la ligne le mot est fini
+		if caractère == 10 { //si on rencontre un retour à la ligne
 			liste_mots = append(liste_mots, mot) //on l'ajoute à la liste
 			mot = ""                             //on rénitialise mot
-		} else { //sinon on ajoute le caractère a mot
+		} else if caractère != 13 { //si on ne rencontre pas un retour à la ligne
 			mot += string(caractère)
 		}
 		if index == len(fichier)-1 { //on vérifie la fin
 			liste_mots = append(liste_mots, mot)
 		}
-		if caractère == 32 || (!Est_lettre(string(caractère)) && caractère != 10) { //si le caractère est un espace
+		if caractère == 32 || (!Est_lettre(string(caractère)) && caractère != 10 && caractère != 13) { //vérifie que le fichier ne contient que des lettres minuscules et des apostrophes
 			Partie.Phrase = "Le fichier contient des caractères non autorisés, merci d'utiliser un fichier texte avec uniquement des lettres minuscules"
 			print(Partie.Phrase)
 			os.Exit(1) //on quitte le programme

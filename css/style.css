@@ -13,17 +13,33 @@ body {
 
 }
 
-.accueil{
-    background-image: url("../images/maxresdefault.png");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+.background {
+    text-align: center; 
+    background: linear-gradient(-45deg, #386641 0%, #6a994e 25%, #a7c957 50%, #b6d078 75%, #b8ca8e 100%);
+    background-size: 1000% 1000%;
+    animation: gradient 30s ease infinite;
+    height: 100vh;
+}
+
+#index_position {
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.boite_accueil {
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.center {
     padding: 20px;
     display: flex;
     flex-direction: column;
@@ -35,18 +51,22 @@ body {
     align-items: center;
 }
 
-.texte_accueil {
+.index_text {
     font-size: 30px;
     font-family: 'Lobster', cursive;
     margin-bottom: 20px;
 }
 
-.bouton_accueil{
+button {
     background-color: rgb(0, 75, 32);
     color: white;
     border: none;
     padding: 10px 25px;
     border-radius: 20px;
+}
+
+button:hover {
+    background-color: rgb(0, 100, 32);
 }
 
 h1 {
@@ -64,7 +84,7 @@ form {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    align-items: center;
+    align-items: baseline;
     text-align: center;
 }
 
@@ -74,8 +94,13 @@ form p {
     margin-right: 10px;
 }
 
+.center p {
+    font-size: 20px;
+    font-family: 'Lobster', cursive;
+    margin-bottom: 10px;
+}
+
 select {
-    /* make a beatiful select */
     background-color: rgb(0, 75, 32);
     color: white;
     border: none;
@@ -86,26 +111,22 @@ select {
 
 .input {
     padding: 6px;
+    font-size: 15px;
     border-radius: 20px;
     border: none;
     margin-right: 10px;
 }
 
-.fond_pendu {
-    background-color: #046e38;
-    text-align: center;
-}
-
-.gauche {
+.left {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    width: 50vw;
+    width: 50%;
     height: 100%;
 }
 
-.droite {
+.right {
     display:flex;
     justify-content: center;
     align-items: center;
@@ -114,35 +135,78 @@ select {
     height: 100%;
 }
 
-.centre {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    width: 100%;
-    height: 100%;
+.victory {
+    font-weight: bolder;
+    background-image: linear-gradient(
+      to right,
+      #89603A 0,
+      #cb9b51 22%, 
+      #f6e27a 45%,
+      #f6f2c0 50%,
+      #f6e27a 55%,
+      #cb9b51 78%,
+      #89603A 100%
+    );
+    color:transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
 }
 
-.titre_pendu {
+.hangman_title {
+    font-size: 50px;
+    font-family: 'Lobster', cursive;
+}
+
+.box_title {
+    /* make a box for the title at the center top of the page */
+    position: absolute;
+    top: 15%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#warning {
+    margin-top: 5px;
+    font-size: 13px;
+    font-family: 'Lobster', cursive;
+    font-style: italic;
+}
+
+#acutal_word {
     font-size: 40px;
     font-family: 'Lobster', cursive;
+    font-weight: bold;
+    letter-spacing: 10px;
+    margin-bottom: 15px;
 }
 
-#attention {
-    margin-top: 5px;
-    font-size: 15px;
-    font-family: 'Lobster', cursive;
-    color: red;
-}
-
-#mot_actuel {
-    font-size: 30px;
-    font-family: 'Lobster', cursive;
-    letter-spacing: 5px;
-}
-
-#phrase_pendu {
+#letter_list {
+    font-weight: bold;
     font-size: 20px;
     font-family: 'Lobster', cursive;
-    margin-top: 10px;
+}
+
+#hangman_sentence {
+    margin-bottom: 5px;
+    margin-top: 20px;
+    font-family: 'Lobster', cursive;
+}
+
+#hangman_input {
+    margin-bottom: 10px;
+    font-family: 'Lobster', cursive;
+    font-size: 20px;
+    border: none;
+    border-bottom: 1px solid rgb(0, 0, 0);
+    background-color: transparent;
+    color: rgb(0, 0, 0);
+    text-align: center;
+}
+
+input:focus {
+    outline: none;
+}
+
+select:focus {
+    outline: none;
 }
