@@ -6,6 +6,7 @@ import (
 	"os"
 	"sort"
 	"strings"
+	"time"
 )
 
 // variables globales
@@ -14,17 +15,17 @@ type Variables_pendu struct {
 	Mot_actuel    string
 	Essaie        int
 	Liste_lettre  []string
-	phrase        string
+	Phrase        string
 }
 
 func Jeux_pendu() {
 	var Partie Variables_pendu
 	Partie.Initialisation("words.txt") //on initialise le jeu
 	for Partie.Essaie > 0 {            //boucle principale du jeu, s'arrête lorsque l'on perd
-		Affichage_mot(Partie)                                  //on affiche le mot actuel
-		Affichage_liste_lettre(Partie)                         //on affiche la liste des lettres déjà essayées
-		Revelation_lettre(Entrée_utilisateur(Partie), &Partie) //on demande à l'utilisateur de rentrer une lettre
-		if Partie.Mot_actuel == Partie.Mot_a_trouver {         //condition de victoire
+		Partie.Affichage_mot()                                       //on affiche le mot actuel
+		Partie.Affichage_liste_lettre()                              //on affiche la liste des lettres déjà essayées
+		Partie.Revelation_lettre(Partie.Entrée_utilisateur("salut")) //on demande à l'utilisateur de rentrer une lettre
+		if Partie.Mot_actuel == Partie.Mot_a_trouver {               //condition de victoire
 			fmt.Println("\n\nVous avez gagné !\nLe mot était bien :", Partie.Mot_a_trouver)
 			os.Exit(0) //sortie du programme
 		}
@@ -33,18 +34,17 @@ func Jeux_pendu() {
 }
 
 func (Partie *Variables_pendu) Initialisation(fichier string) { //initialise le jeu
-	Partie.Essaie = 10               //on initialise le nombre d'essaie
-	Lecture_Fichier(fichier, Partie) //on lit le fichier donné en argument
+	Partie.Lecture_Fichier(fichier) //on lit le fichier donné en argument
 }
 
-func Affichage_mot(Partie Variables_pendu) {
+func (Partie *Variables_pendu) Affichage_mot() {
 	fmt.Println()
 	for _, caractère := range Partie.Mot_actuel {
 		fmt.Print(strings.ToUpper(string(caractère)), " ") // Permet d'afficher les lettres en majuscule avec un espace entre chaque
 	}
 }
 
-func Affichage_liste_lettre(Partie Variables_pendu) {
+func (Partie *Variables_pendu) Affichage_liste_lettre() {
 	if len(Partie.Liste_lettre) == 0 { //si la liste est vide
 		return
 	}
@@ -55,45 +55,44 @@ func Affichage_liste_lettre(Partie Variables_pendu) {
 	fmt.Println()
 }
 
-func Affichage_pendu(Partie Variables_pendu) {
-	fichier, err := os.ReadFile("hangman.txt") //on lit le fichier
-	if err != nil {                            //si il y a une erreur
-		Partie.phrase = "Impossible d'ouvrir le fichier hangman.txt"
+func (Partie *Variables_pendu) Affichage_pendu() {
+	fichier, err := os.ReadFile("pendu/hangman.txt") //on lit le fichier
+	if err != nil {                                  //si il y a une erreur
+		Partie.Phrase = "Impossible d'ouvrir le fichier hangman.txt"
+		print(Partie.Phrase)
 		os.Exit(1) //on quitte le programme
 	}
 	var position int = 10 - (Partie.Essaie + 1) //on calcule la position de la ligne à afficher
 	for i := 0; i < 7; i++ {                    //on boucle sur les 7 lignes du fichier
 		for j := 0; j < 10; j++ { //on boucle sur les 10 caractères de la ligne
-			Partie.phrase = string(fichier[position*71+i*10+j])
+			Partie.Phrase = string(fichier[position*71+i*10+j])
 		}
 	}
 }
 
-func Entrée_utilisateur(Partie Variables_pendu) string { //demande à l'utilisateur de choisir une lettre ou un mot
-	var lettre string
-	fmt.Print("Choix : ")
-	fmt.Scanln(&lettre)      //on récupère l'entrée utilisateur
+func (Partie *Variables_pendu) Entrée_utilisateur(lettre string) string { //demande à l'utilisateur de choisir une lettre ou un mot
 	if !Est_lettre(lettre) { //vérifie que l'utilisateur a bien entré que des lettres
-		fmt.Println("Merci de n'entrer que des lettres minusucules")
-		return Entrée_utilisateur(Partie) //on relance la fonction
+		Partie.Phrase = "Merci de n'entrer que des lettres minusucules"
+		return ""
 	}
 	if len(lettre) == 1 { //vérifie que l'utilisateur n'a pas entré plus d'une lettre
 		for _, lettre_essaye := range Partie.Liste_lettre { //vérifie que l'utilisateur n'a pas déjà essayé cette lettre
 			if strings.ToUpper(lettre) == lettre_essaye {
-				fmt.Println("Vous avez déjà essayé cette lettre, merci d'en choisir une autre")
-				return Entrée_utilisateur(Partie) //on relance la fonction
+				Partie.Phrase = "Vous avez déjà essayé cette lettre, merci d'en choisir une autre"
+				return ""
 			}
 		}
 	}
 	return strings.ToLower(lettre) //on retourne la lettre en minuscule
 }
 
-func Lecture_Fichier(nom_fichier string, Partie *Variables_pendu) {
+func (Partie *Variables_pendu) Lecture_Fichier(nom_fichier string) {
 	var mot string
 	var liste_mots []string
 	fichier, err := os.ReadFile(nom_fichier) //on lit le fichier
 	if err != nil {                          //si il y a une erreur
-		Partie.phrase = "Impossible d'ouvrir le fichier " + nom_fichier
+		Partie.Phrase = "Impossible d'ouvrir le fichier " + nom_fichier
+		print(Partie.Phrase)
 		os.Exit(1) //on quitte le programme
 	}
 	for index, caractère := range fichier {
@@ -107,11 +106,14 @@ func Lecture_Fichier(nom_fichier string, Partie *Variables_pendu) {
 			liste_mots = append(liste_mots, mot)
 		}
 		if caractère == 32 || (!Est_lettre(string(caractère)) && caractère != 10) { //si le caractère est un espace
-			Partie.phrase = "Le fichier contient des caractères non autorisés, merci d'utiliser un fichier texte avec uniquement des lettres minuscules"
+			Partie.Phrase = "Le fichier contient des caractères non autorisés, merci d'utiliser un fichier texte avec uniquement des lettres minuscules"
+			print(Partie.Phrase)
 			os.Exit(1) //on quitte le programme
 		}
+		Partie.Essaie = 10 //on initialise le nombre d'essaie
 	}
-	rand.Seed(int64(os.Getpid()))                                 //on initialise le générateur de nombre aléatoire
+	//utiliser un seed aléatoire permet d'éviter que le mot soit toujours le même lors de la même exécution du programme
+	rand.Seed(time.Now().UnixNano())                              //on utilise le temps actuel comme seed
 	Partie.Mot_a_trouver = liste_mots[rand.Intn(len(liste_mots))] //on choisit un mot aléatoire
 	for i := 0; i < len(Partie.Mot_a_trouver); i++ {
 		Partie.Mot_actuel += "_" //on initialise le mot actuel avec des _
@@ -121,8 +123,8 @@ func Lecture_Fichier(nom_fichier string, Partie *Variables_pendu) {
 	}
 }
 
-func Revelation_lettre(lettre string, Partie *Variables_pendu) {
-	if len(lettre) != 1 { //vérifie que l'utilisateur a rentré une lettre ou un mot
+func (Partie *Variables_pendu) Revelation_lettre(lettre string) {
+	if len(lettre) > 1 { //vérifie que l'utilisateur a rentré une lettre ou un mot
 		if lettre == Partie.Mot_a_trouver { //vérifie que le mot entré est le bon
 			Partie.Mot_actuel = Partie.Mot_a_trouver //on met le mot actuel à jour
 		} else {
@@ -130,10 +132,10 @@ func Revelation_lettre(lettre string, Partie *Variables_pendu) {
 			if Partie.Essaie < 0 { //vérifie si il reste encore des essaies
 				Partie.Essaie = 0 //on met les essai à 0 au cas ou ils étaient négatif
 			}
-			Affichage_pendu(*Partie) //on affiche le pendu
-			Partie.phrase = "Votre mot est incorrect, il vous reste " + string(rune(Partie.Essaie)) + " essaies"
+			Partie.Affichage_pendu() //on affiche le pendu
+			Partie.Phrase = "Votre mot est incorrect"
 		}
-	} else {
+	} else if len(lettre) == 1 { //vérifie que l'utilisateur a rentré une lettre
 		var mot_temporaire string
 		for index, caractère := range Partie.Mot_a_trouver { //on parcourt le mot à trouver
 			if string(caractère) == lettre { //si la lettre est dans le mot
@@ -146,13 +148,13 @@ func Revelation_lettre(lettre string, Partie *Variables_pendu) {
 		sort.Strings(Partie.Liste_lettre)                                          //on trie la liste
 		if mot_temporaire == Partie.Mot_actuel {                                   //si le mot temporaire est égal au mot actuel
 			Partie.Essaie-- //on enlève un essaie
-			Partie.phrase = "La lettre n'est pas dans le mot, il vous reste " + string(rune(Partie.Essaie)) + " essaies :"
+			Partie.Phrase = "La lettre n'est pas dans le mot"
 		} else {
 			Partie.Mot_actuel = mot_temporaire //on met le mot actuel à jour
 			if Partie.Essaie != 10 {
-				Partie.phrase = "La lettre est dans le mot, il vous reste " + string(rune(Partie.Essaie)) + " essaies :"
+				Partie.Phrase = "La lettre est dans le mot"
 			} else {
-				Partie.phrase = "La lettre est dans le mot, il vous reste " + string(rune(Partie.Essaie)) + " essaies :"
+				Partie.Phrase = "La lettre est dans le mot"
 			}
 		}
 	}

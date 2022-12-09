@@ -4,36 +4,34 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/style.css" type="text/css">    
+        <link rel="stylesheet" href="css/style.css" type="text/css">    
+        <link rel="shortcut icon" href="images/potence.ico" />
     </head>
     <body class="accueil">
-        <div class="boite_principale">
+        <div class="boite_accueil">
         {{if .Success}} 
-            {{if eq .Difficulte "facile"}}
-                <h1>Bienvenue jeune joueur<br>
-                Vous avez choigit psi le niveau {{.Difficulte}}</h1>
-                <a href="/pendu">Jouer</a>
-            {{else if eq .Difficulte "moyen"}}
-                <h1>Bienvenue jeune joueur<br>
-                Vous avez choisi le niveau {{.Difficulte}}</h1>
-                <a href="/pendu">Jouer</a>
-            {{else if eq .Difficulte "difficile"}}
-                <h1>Bienvenue jeune joueur<br>
-                Vous avez choisi le niveau {{.Difficulte}}</h1>
-                <a href="/pendu">Jouer</a>
-            {{end}}
-        {{else}}
-            <h1>Bienvenue sur le jeu du pendu !<br>
-                Veuillez remplir les champs ci-dessous pour jouer </h1>
-            <form method="POST">
-                <input type="radio" id="facile" name="difficulte" value="facile">
-                <label for="facile">Facile</label>
-                <input type="radio" id="moyen" name="difficulte" value="moyen" checked>
-                <label for="moyen">Moyen</label>
-                <input type="radio" id="difficile" name="difficulte" value="difficile">
-                <label for="difficile">Difficile</label>
-                <input type="submit" value="Choisir">
+            <div class="texte_accueil">
+            <h1>Bienvenue {{.Username}} !</h1>
+            <form method="POST" action="/pendu" class="difficulte">
+                <p>Choisissez la difficulté :</p>
+                <select name="difficulte">
+                    <option value="facile">Facile</option>
+                    <option value="moyen" selected>Moyen</option>
+                    <option value="difficile">Difficile</option>
+                </select>
+            </div>
+                <button class="bouton_accueil" type="submit">Commencer</button>
             </form>
+        {{else}}
+            <div class="texte_accueil">
+            <h1>Bienvenue sur le jeu du pendu !</h1>
+            <form method="POST" action="/">
+                <p>Pour commencer, veuillez entrez votre pseudo :</p>
+                <input class="input" type="text" name="username" placeholder="Pseudo" autofocus>
+            </div>
+                <button class="bouton_accueil" type="submit">Suivant</button>
+            </form>
+
         {{end}}
         </div>
     </body>
