@@ -2,6 +2,7 @@
     box-sizing: border-box;
     margin: 0px;
     padding: 0px;
+    font-family: 'Lobster', cursive;
 }
 
 body {
@@ -53,7 +54,6 @@ body {
 
 .index_text {
     font-size: 30px;
-    font-family: 'Lobster', cursive;
     margin-bottom: 20px;
 }
 
@@ -71,13 +71,11 @@ button:hover {
 
 h1 {
     font-size: 50px;
-    font-family: 'Lobster', cursive;
     margin-bottom: 10px;
 }
 
 p {
     font-size: 18px;
-    font-family: 'Lobster', cursive;
 }
 
 form {
@@ -90,13 +88,11 @@ form {
 
 form p {    
     font-size: 20px;
-    font-family: 'Lobster', cursive;
     margin-right: 10px;
 }
 
 .center p {
     font-size: 20px;
-    font-family: 'Lobster', cursive;
     margin-bottom: 10px;
 }
 
@@ -118,21 +114,21 @@ select {
 }
 
 .left {
+    margin-top: 10%;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     width: 50%;
-    height: 100%;
 }
 
 .right {
+    margin-top: 10%;
     display:flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     width: 50%;
-    height: 100%;
 }
 
 .victory {
@@ -154,27 +150,40 @@ select {
 
 .hangman_title {
     font-size: 50px;
-    font-family: 'Lobster', cursive;
 }
 
+
 .box_title {
-    /* make a box for the title at the center top of the page */
     position: absolute;
-    top: 15%;
+    top: 20%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+
+.statistic {
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    text-align: left;
+    background-color : rgba(0, 0, 0, 0.5);
+    border-bottom-right-radius: 20px;
+    color:white;
+    padding: 10px 20px;
+}
+
+.statistic p {
+    font-size: 18px;
 }
 
 #warning {
     margin-top: 5px;
     font-size: 13px;
-    font-family: 'Lobster', cursive;
     font-style: italic;
 }
 
-#acutal_word {
+#actual_word {
     font-size: 40px;
-    font-family: 'Lobster', cursive;
     font-weight: bold;
     letter-spacing: 10px;
     margin-bottom: 15px;
@@ -183,18 +192,15 @@ select {
 #letter_list {
     font-weight: bold;
     font-size: 20px;
-    font-family: 'Lobster', cursive;
 }
 
 #hangman_sentence {
     margin-bottom: 5px;
     margin-top: 20px;
-    font-family: 'Lobster', cursive;
 }
 
 #hangman_input {
     margin-bottom: 10px;
-    font-family: 'Lobster', cursive;
     font-size: 20px;
     border: none;
     border-bottom: 1px solid rgb(0, 0, 0);
@@ -209,4 +215,72 @@ input:focus {
 
 select:focus {
     outline: none;
+}
+
+button:focus {
+    outline: rgb(0, 75, 32);
+}
+
+a {
+    color: rgb(0, 75, 32);
+    text-decoration: none;
+    border-bottom: 1px solid rgb(0, 75, 32);
+}
+
+a:hover {
+    color: rgb(0, 100, 32);
+    border-bottom: 1px solid rgb(0, 100, 32);
+}
+
+@media screen and (max-width: 800px) {
+    .left {
+        width: 100%;
+    }
+    .right {
+        width: 100%;
+        margin-bottom: 10%;
+    }
+    body {
+        flex-direction: column;
+        justify-content: flex-end;
+    }
+    .box_title {
+        position: relative;
+        width: 100%;
+        top: 0%;
+        left: 0%;
+        transform: none;
+    }
+    .statistic {
+        top: 0%;
+        left: 0%;
+    }
+    .statistic p {
+        font-size: 15px;
+    }
+    .hangman_title {
+        font-size: 30px;
+    }
+}
+
+@media screen and (max-height:750px) {
+    .left {
+        margin: 0px;
+    }
+    .right {
+        margin: 5px;
+
+    }   
+    #hangman_sentence {
+        margin-bottom: 0px;
+        margin-top: 0px;
+    }
+    #hangman_input {
+        margin-bottom: 0px;
+    }
+    #actual_word {
+        font-size: 30px;
+        letter-spacing: 5px;
+        margin-bottom: 0px;
+    }
 }

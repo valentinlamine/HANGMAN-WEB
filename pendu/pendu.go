@@ -18,21 +18,6 @@ type Variables_pendu struct {
 	Phrase        string
 }
 
-func Jeux_pendu() {
-	var Partie Variables_pendu
-	Partie.Initialisation("words.txt") //on initialise le jeu
-	for Partie.Essaie > 0 {            //boucle principale du jeu, s'arrête lorsque l'on perd
-		Partie.Affichage_mot()                                       //on affiche le mot actuel
-		Partie.Affichage_liste_lettre()                              //on affiche la liste des lettres déjà essayées
-		Partie.Revelation_lettre(Partie.Entrée_utilisateur("salut")) //on demande à l'utilisateur de rentrer une lettre
-		if Partie.Mot_actuel == Partie.Mot_a_trouver {               //condition de victoire
-			fmt.Println("\n\nVous avez gagné !\nLe mot était bien :", Partie.Mot_a_trouver)
-			os.Exit(0) //sortie du programme
-		}
-	}
-	fmt.Println("\n\nVous avez perdu !\nLe mot était :", Partie.Mot_a_trouver)
-}
-
 func (Partie *Variables_pendu) Initialisation(fichier string) { //initialise le jeu
 	Partie.Lecture_Fichier(fichier) //on lit le fichier donné en argument
 }
