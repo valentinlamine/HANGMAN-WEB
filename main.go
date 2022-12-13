@@ -42,7 +42,7 @@ func main() {
 }
 
 func IndexHandler(w http.ResponseWriter, r *http.Request) {
-	t, _ := template.ParseFiles("index.html")
+	t, _ := template.ParseFiles("templates/index.html")
 	if Joueur.Pendu.Essaie != 0 { //si le joueur a quitté la page pendant une partie
 		Joueur.Pendu = pendu.Variables_pendu{}
 		Joueur.Victoire_consecutives = 0
@@ -69,7 +69,7 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func HangmanHandler(w http.ResponseWriter, r *http.Request) {
-	t, _ := template.ParseFiles("hangman.html")
+	t, _ := template.ParseFiles("templates/hangman.html")
 	if Joueur.Pendu.Essaie == 0 { //si le joueur n'a pas de partie en cours ou qu'il a fini une partie
 		Joueur.Pendu = pendu.Variables_pendu{}     //on réinitialise les variables
 		if r.FormValue("difficulty") == "facile" { //on initialise le pendu en fonction de la difficulté choisie
